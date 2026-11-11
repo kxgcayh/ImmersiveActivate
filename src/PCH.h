@@ -12,8 +12,6 @@
 #include <spdlog/sinks/basic_file_sink.h>
 #include <xbyak/xbyak.h>
 
-#define DLLEXPORT __declspec(dllexport)
-
 namespace logger = SKSE::log;
 namespace string = clib_util::string;
 namespace numeric = clib_util::numeric;
@@ -28,15 +26,14 @@ namespace stl
 	void write_thunk_call(std::uintptr_t a_src)
 	{
 		auto& trampoline = SKSE::GetTrampoline();
-		SKSE::AllocTrampoline(14);
 		T::func = trampoline.write_call<5>(a_src, T::thunk);
 	}
 }
 
-#ifdef SKYRIM_AE
-#	define OFFSET(se, ae) ae
-#else
-#	define OFFSET(se, ae) se
-#endif
+#define OFFSET(se, ae) REL::Relocate(se, ae)
 
-#include "Version.h"
+namespace Version
+{
+	inline constexpr auto NAME = "1.4.1"sv;
+	inline constexpr auto PROJECT = "ImmersiveActivate"sv;
+}

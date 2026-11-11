@@ -40,17 +40,17 @@ namespace UI
 			static void thunk(RE::UIMessageQueue* a_this, const RE::BSFixedString& a_menuName, RE::UI_MESSAGE_TYPE a_type, RE::IUIMessageData* a_data)
 			{
 				const auto data = a_data ? static_cast<RE::HUDData*>(a_data) : nullptr;
-				const auto crossHairRef = data ? data->crossHairRef.get() : RE::TESObjectREFRPtr();
+				const auto crossHairRef = data ? data->crosshairRef.get() : RE::TESObjectREFRPtr();
 
 				if (data && crossHairRef) {
 					const auto settings = Settings::GetSingleton();
 
 					if (const auto textSettings = settings->GetText(crossHairRef); textSettings) {
 						if (textSettings->hideAll) {
-							data->type = RE::HUDData::Type::kUnk0;
+							data->type = RE::HUD_MESSAGE_TYPE::kNone;
 						} else {
 							if (textSettings->hideButton) {
-								data->type = RE::HUDData::Type::kActivateNoLabel;
+								data->type = RE::HUD_MESSAGE_TYPE::kSetCrosshairTargetTextOnly;
 							}
 							const std::string origText = data->text.c_str();
 							std::string newText = ReplaceFormTypeText(crossHairRef, origText, settings);
@@ -135,7 +135,7 @@ namespace UI
 				if (const auto data = a_data ? static_cast<RE::HUDData*>(a_data) : nullptr) {
 					if (const auto textSettings = Settings::GetSingleton()->GetText(RE::FormType::Door); textSettings) {
 						if (textSettings->hideAll) {
-							data->type = RE::HUDData::Type::kUnk0;
+							data->type = RE::HUD_MESSAGE_TYPE::kNone;
 						} else {
 							const std::string origText = data->text.c_str();
 							std::string text = data->text.c_str();
